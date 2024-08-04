@@ -28,6 +28,10 @@ router.get('/new_group', (req, res) => {
 
 router.get('/api/data', exampleController.getData);
 
-router.post('/api/data', exampleController.addNewUser);
+router.post('/add_user', exampleController.addNewUser);
+
+router.put('/api/update_user/:id', exampleController.updateUserDetails);
+
+router.delete('/delete_user/:id', exampleController.delete_user);
 
 module.exports = router;
