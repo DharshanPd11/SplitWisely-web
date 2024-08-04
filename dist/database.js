@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.testConnection = testConnection;
 exports.createUser = createUser;
 exports.getUsers = getUsers;
+exports.updateUser = updateUser;
+exports.deleteUser = deleteUser;
 const promise_1 = __importDefault(require("mysql2/promise"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -56,6 +58,32 @@ function getUsers() {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield pool.query("SELECT * From User");
         return result[0];
+    });
+}
+function updateUser(id, name, email) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield pool.query("UPDATE User SET Name = '" + name + "', Email = '" + email + "' WHERE ID=" + id);
+            console.log(yield pool.query("SELECT * from User WHERE ID=" + id));
+            return "User " + id + " Updated  Successfully!";
+        }
+        catch (error) {
+            console.error('An error occurred while updating user details to DB', error);
+            throw error;
+        }
+    });
+}
+function deleteUser(id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield pool.query("DELETE from User WHERE id=" + id);
+            console.log("User " + id + " Deleted  Successfully!");
+            return "User " + id + " Deleted  Successfully!";
+        }
+        catch (error) {
+            console.error('An error occurred while Deleting user from DB', error);
+            throw error;
+        }
     });
 }
 testConnection();
