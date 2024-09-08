@@ -1,15 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
-
 // src/App.js
 import React from 'react';
-import MyComponent from './components/testComponent';
+import Sidebar from './components/Sidebar';
+import './App.css'; // Import CSS for the main layout
 
 const App = () => {
   return (
-    <div>
-      <h1>My React App</h1>
-      <MyComponent />
+    <div className="app-container">
+      <Sidebar />
+      <div className="main-content">
+        <h1>Main Content Area</h1>
+        <p>Here is where your main content will go.</p>
+      </div>
     </div>
   );
 };

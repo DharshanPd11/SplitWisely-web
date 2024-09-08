@@ -35,12 +35,13 @@ export const addNewUser = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-export const updateUserDetails = async (req: Request, res: Response): Promise<any> => {
-  const updateUserSchema = Joi.object({
-    name: Joi.string().min(2).required(),
-    email: Joi.string().email().required(),
-  });
+const updateUserSchema = Joi.object({
+  name: Joi.string().min(2).required(),
+  email: Joi.string().email().required(),
+});
 
+export const updateUserDetails = async (req: Request, res: Response): Promise<any> => {
+  
   const {error, value} = updateUserSchema.validate(req.body);
   if(error){
     return res.status(400).send(error.details[0].message);

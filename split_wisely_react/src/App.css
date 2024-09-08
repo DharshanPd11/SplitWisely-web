@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+/* App.css */
+.app-container {
+  display: flex;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #e9ecef;
+}
