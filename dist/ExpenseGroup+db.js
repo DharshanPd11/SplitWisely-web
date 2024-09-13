@@ -23,9 +23,9 @@ const database_1 = __importDefault(require("./database"));
 // | Members           | json         | YES  |     | NULL    |                |
 // | AssociatedMembers | json         | YES  |     | NULL    |                |
 // | DateTime 
-function addExpenseGroup(name, description, addedUser, associatedExpenseGroups, datetime) {
+function addExpenseGroup(name, description, addedUser, associatedMembers, datetime) {
     return __awaiter(this, void 0, void 0, function* () {
-        const associatedMembersJson = JSON.stringify(associatedExpenseGroups);
+        const associatedMembersJson = JSON.stringify(associatedMembers);
         try {
             const [result, fields] = yield database_1.default.query("INSERT into ExpenseGroups (Name, Description, AddedUser, AssociatedMembers, DateTime ) VALUES (?,?,?,?,?)", [
                 name, description, addedUser, associatedMembersJson, datetime
@@ -39,7 +39,7 @@ function addExpenseGroup(name, description, addedUser, associatedExpenseGroups, 
         }
     });
 }
-function updateExpenseGroup(id, name, description, addedUser, associatedExpenseGroups, datetime) {
+function updateExpenseGroup(id, name, description, addedUser, associatedMembers, datetime) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const updates = [];
@@ -56,9 +56,10 @@ function updateExpenseGroup(id, name, description, addedUser, associatedExpenseG
                 updates.push("AddedUser = ?");
                 values.push(addedUser);
             }
-            if (associatedExpenseGroups) {
+            if (associatedMembers) {
                 updates.push("AssociatedMembers = ?");
-                values.push(associatedExpenseGroups);
+                const associatedMembersJSON = JSON.stringify(associatedMembers);
+                values.push(associatedMembersJSON);
             }
             if (datetime) {
                 updates.push("DateTime = ?");
@@ -67,6 +68,7 @@ function updateExpenseGroup(id, name, description, addedUser, associatedExpenseG
             if (updates.length === 0) {
                 throw new Error("No values provided for update.");
             }
+            values.push(id);
             const query = `
             UPDATE ExpenseGroups 
             SET ${updates.join(", ")}

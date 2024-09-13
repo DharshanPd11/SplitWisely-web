@@ -1,6 +1,6 @@
 import { error } from "console";
 
-import pool from './database'; 
+import pool from './database';
 
 // Name              | varchar(100) | YES  |     | NULL    |                |
 // | Description       | text         | YES  |     | NULL    |                |
@@ -10,40 +10,40 @@ import pool from './database';
 // | DateTime 
 
 export async function addExpenseGroup(
-    name:string,
-    description:string, 
-    addedUser: number, 
-    associatedExpenseGroups:string[],
-    datetime:string ) {
-    const associatedMembersJson = JSON.stringify(associatedExpenseGroups);
+    name: string,
+    description: string,
+    addedUser: number,
+    associatedMembers: string[],
+    datetime: string) {
+    const associatedMembersJson = JSON.stringify(associatedMembers);
 
-    try{
-        const [result, fields] : [any[], any] = await pool.query("INSERT into ExpenseGroups (Name, Description, AddedUser, AssociatedMembers, DateTime ) VALUES (?,?,?,?,?)", 
-        [
-            name, description ,addedUser, associatedMembersJson, datetime
-        ]);
+    try {
+        const [result, fields]: [any[], any] = await pool.query("INSERT into ExpenseGroups (Name, Description, AddedUser, AssociatedMembers, DateTime ) VALUES (?,?,?,?,?)",
+            [
+                name, description, addedUser, associatedMembersJson, datetime
+            ]);
         console.log(associatedMembersJson);
         console.log(result);
     }
-    catch (error){
+    catch (error) {
         console.error("Error adding Expense Group !", error);
-        throw(error);
+        throw (error);
     }
 }
 
 export async function updateExpenseGroup(
     id: number,
-    name?:string,
-    description?:string, 
-    addedUser?: number, 
-    associatedExpenseGroups?:[number],
-    datetime?:string ) {
-        
-    try{
-        const updates : string[] = []
+    name?: string,
+    description?: string,
+    addedUser?: number,
+    associatedMembers?: [number],
+    datetime?: string) {
+
+    try {
+        const updates: string[] = []
         const values: any[] = []
-        
-        if (name){
+
+        if (name) {
             updates.push("Name = ?");
             values.push(name);
         }
@@ -55,9 +55,10 @@ export async function updateExpenseGroup(
             updates.push("AddedUser = ?");
             values.push(addedUser);
         }
-        if (associatedExpenseGroups) {
+        if (associatedMembers) {
             updates.push("AssociatedMembers = ?");
-            values.push(associatedExpenseGroups);
+            const associatedMembersJSON = JSON.stringify(associatedMembers);
+            values.push(associatedMembersJSON);
         }
         if (datetime) {
             updates.push("DateTime = ?");
@@ -67,6 +68,8 @@ export async function updateExpenseGroup(
         if (updates.length === 0) {
             throw new Error("No values provided for update.");
         }
+
+        values.push(id);
 
         const query = `
             UPDATE ExpenseGroups 
@@ -79,14 +82,14 @@ export async function updateExpenseGroup(
         console.log("Update successful:", result);
         return result;
     }
-    catch (error){
+    catch (error) {
         console.error("Error adding Expense Group !", error);
-        throw(error);
+        throw (error);
     }
 }
 
-export async function deleteExpenseGroup(id: number){
-    try{
+export async function deleteExpenseGroup(id: number) {
+    try {
         const query = `
         DELETE from ExpenseGroups
         WHERE id = ?
@@ -94,6 +97,6 @@ export async function deleteExpenseGroup(id: number){
         const [result, fields]: [any[], any] = await pool.query(query, [id]);
     } catch {
         console.error("Error deleting Expense Group");
-        throw(error);
+        throw (error);
     }
 }

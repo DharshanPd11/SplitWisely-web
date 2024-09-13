@@ -7,7 +7,7 @@ class Expense {
     amount: number;
     currency: string;
     splitBy: User[];
-    associatedExpenseGroup: ExpenseGroup; 
+    associatedExpenseGroup: ExpenseGroup;
 
     constructor(id: number, name: string, createdBy: User, amount: number, currency: string, splitBy: User[], associatedExpenseGroup: ExpenseGroup) {
         this.id = ++Expense.lastID;
@@ -19,10 +19,10 @@ class Expense {
         this.associatedExpenseGroup = associatedExpenseGroup;
     }
 
-    getName(): string{
+    getName(): string {
         return this.name;
     }
-    setName(newName: string){
+    setName(newName: string) {
         this.name = newName;
     }
 
@@ -33,28 +33,28 @@ class Expense {
         this.amount = newAmount;
     }
 
-    getCurrency(): string{
+    getCurrency(): string {
         return this.currency;
     }
-    setCurrency(newCurrency: string){
+    setCurrency(newCurrency: string) {
         this.currency = newCurrency;
     }
 
-    addSplitMember(userList: User[]){
-        for(const user of userList) {
+    addSplitMember(userList: User[]) {
+        for (const user of userList) {
             this.splitBy.push(user);
         }
         this.splitBy.push
     }
-    getSplitMembers(): User[]{
+    getSplitMembers(): User[] {
         return this.splitBy;
     }
 
     getExpenseGroup(): ExpenseGroup {
         return this.associatedExpenseGroup;
     }
-    setExpenseGroup(newGroup: ExpenseGroup):void {
+    setExpenseGroup(newGroup: ExpenseGroup): void {
         this.associatedExpenseGroup = newGroup;
-    } 
+    }
 
-  }
+}
