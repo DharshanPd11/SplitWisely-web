@@ -6,11 +6,11 @@ const expenseGroupController = require('../dist/controllers/ExpenseGroupControll
 
 // Define the root route to serve the React app
 router.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../split_wisely_react/build', 'index.html'));
-  });
-  
+  res.sendFile(path.join(__dirname, '../../split_wisely_react/build', 'index.html'));
+});
+
 router.get('/new_group', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../split_wisely_react/build', 'add_group.html'));
+  res.sendFile(path.join(__dirname, '../../split_wisely_react/build', 'add_group.html'));
 });
 
 // router.post('/api/data', async (req, res, next) => {
@@ -37,6 +37,6 @@ router.delete('/delete_user/:id', userController.delete_user);
 
 //EXPENSE GROUP METHODS
 router.post('/api/add_expense_group', expenseGroupController.addNewExpenseGroup);
-router.post('/api/update_expense_group', expenseGroupController.editExpenseGroup);
-router.delete('/api/delete_expense_group', expenseGroupController.removeExpenseGroup);
+router.put('/api/update_expense_group/:id', expenseGroupController.editExpenseGroup);
+router.delete('/api/delete_expense_group/:id', expenseGroupController.removeExpenseGroup);
 module.exports = router;

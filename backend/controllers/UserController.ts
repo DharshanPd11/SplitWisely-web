@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
-import {createUser, getUsers, deleteUser, updateUser} from '../database';
+import { createUser, getUsers, deleteUser, updateUser } from '../database';
 
-export const  getData = async (req: Request, res: Response): Promise<any> => {
+export const getData = async (req: Request, res: Response): Promise<any> => {
   const result = await getUsers()
   console.log(result);
   res.json({ data: result });
@@ -41,28 +41,28 @@ const updateUserSchema = Joi.object({
 });
 
 export const updateUserDetails = async (req: Request, res: Response): Promise<any> => {
-  
-  const {error, value} = updateUserSchema.validate(req.body);
-  if(error){
+
+  const { error, value } = updateUserSchema.validate(req.body);
+  if (error) {
     return res.status(400).send(error.details[0].message);
   }
 
-  const {name, email} = value;
+  const { name, email } = value;
   const userId = parseInt(req.params.id);
 
   try {
-    const details = await updateUser(userId, name,email);
+    const details = await updateUser(userId, name, email);
     res.json({ message: 'Data received', data: details });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
-    }
+  }
 };
 
 export const delete_user = async (req: Request, res: Response): Promise<any> => {
   const deleteUserSchema = Joi.number().integer().positive().required();
-  const {error,value} = deleteUserSchema.validate(parseInt(req.params.id));
-  if(error){
+  const { error, value } = deleteUserSchema.validate(parseInt(req.params.id));
+  if (error) {
     return res.status(400).send(error.details[0].message);
   }
   const userId = value;
