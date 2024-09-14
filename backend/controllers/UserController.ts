@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
-import { createUser, getUsers, deleteUser, updateUser } from '../database';
+import { createUser, getUsers, deleteUser, updateUser } from '../db.methods/User.db';
 
 export const getData = async (req: Request, res: Response): Promise<any> => {
   const result = await getUsers()

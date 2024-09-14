@@ -1,6 +1,5 @@
 import { error } from "console";
-
-import pool from './database';
+import pool from './User.db';
 
 // Name              | varchar(100) | YES  |     | NULL    |                |
 // | Description       | text         | YES  |     | NULL    |                |
@@ -66,7 +65,7 @@ export async function updateExpenseGroup(
         }
 
         if (updates.length === 0) {
-            throw new Error("No values provided for update.");
+           console.log("No values provided for update.");
         }
 
         values.push(id);
@@ -84,7 +83,6 @@ export async function updateExpenseGroup(
     }
     catch (error) {
         console.error("Error adding Expense Group !", error);
-        throw (error);
     }
 }
 
@@ -97,6 +95,5 @@ export async function deleteExpenseGroup(id: number) {
         const [result, fields]: [any[], any] = await pool.query(query, [id]);
     } catch {
         console.error("Error deleting Expense Group");
-        throw (error);
     }
 }

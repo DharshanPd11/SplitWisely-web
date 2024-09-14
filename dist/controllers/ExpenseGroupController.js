@@ -14,11 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeExpenseGroup = exports.editExpenseGroup = exports.addNewExpenseGroup = void 0;
 const joi_1 = __importDefault(require("joi"));
-const ExpenseGroup_db_1 = require("../ExpenseGroup+db");
+const ExpenseGroup_db_1 = require("../db.methods/ExpenseGroup.db");
 const ExpenseGroupScheme = joi_1.default.object({
     name: joi_1.default.string().min(2).required(),
     description: joi_1.default.string().optional(),
-    addedUser: joi_1.default.number().required(),
+    addedUser: joi_1.default.number().integer().positive().required(),
     associatedMembers: joi_1.default.array().items(joi_1.default.string()).optional(),
     dateTime: joi_1.default.date().iso().required()
 });
@@ -35,7 +35,6 @@ const addNewExpenseGroup = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
     catch (err) {
         console.error("Error Adding Expens Group");
-        throw (err);
     }
 });
 exports.addNewExpenseGroup = addNewExpenseGroup;

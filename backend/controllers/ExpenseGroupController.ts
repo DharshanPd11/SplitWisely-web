@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import Joi, { number } from 'joi';
-import { deleteExpenseGroup, addExpenseGroup, updateExpenseGroup } from '../ExpenseGroup+db';
+import { deleteExpenseGroup, addExpenseGroup, updateExpenseGroup } from '../db.methods/ExpenseGroup.db';
 
 const ExpenseGroupScheme = Joi.object({
     name: Joi.string().min(2).required(),
     description: Joi.string().optional(),
-    addedUser: Joi.number().required(),
+    addedUser: Joi.number().integer().positive().required(),
     associatedMembers: Joi.array().items(Joi.string()).optional(),
     dateTime: Joi.date().iso().required()
 });
@@ -32,7 +32,6 @@ export const addNewExpenseGroup = async (req: Request, res: Response): Promise<a
     }
     catch (err) {
         console.error("Error Adding Expens Group");
-        throw (err);
     }
 }
 
