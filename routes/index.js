@@ -3,6 +3,7 @@ const path = require('path');
 const router = express.Router();
 const userController = require('../dist/controllers/test');
 const expenseGroupController = require('../dist/controllers/ExpenseGroupController')
+const expenseController = require('../dist/controllers/ExpenseController')
 
 // Define the root route to serve the React app
 router.get('/', (req, res) => {
@@ -25,6 +26,7 @@ router.get('/new_group', (req, res) => {
 // });
 
 
+
 //USER METHODS
 router.get('/api/data', userController.getData);
 
@@ -39,4 +41,10 @@ router.delete('/delete_user/:id', userController.delete_user);
 router.post('/api/add_expense_group', expenseGroupController.addNewExpenseGroup);
 router.put('/api/update_expense_group/:id', expenseGroupController.editExpenseGroup);
 router.delete('/api/delete_expense_group/:id', expenseGroupController.removeExpenseGroup);
+
+//EXPENSE METHODS
+router.post('/api/add_expense', expenseController.addNewExpense);
+router.put('/api/update_expense/:id', expenseController.editExpense);
+router.delete('/api/delete_expense/:id', expenseController.removeExpense);
+
 module.exports = router;

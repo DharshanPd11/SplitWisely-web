@@ -14,9 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.delete_user = exports.updateUserDetails = exports.addNewUser = exports.postData = exports.getData = void 0;
 const joi_1 = __importDefault(require("joi"));
-const database_1 = require("../database");
+const User_db_1 = require("../db.methods/User.db");
 const getData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield (0, database_1.getUsers)();
+    const result = yield (0, User_db_1.getUsers)();
     console.log(result);
     res.json({ data: result });
 });
@@ -38,7 +38,7 @@ const addNewUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     const { name, email, groups } = value;
     try {
-        const user = yield (0, database_1.createUser)(name, email, groups);
+        const user = yield (0, User_db_1.createUser)(name, email, groups);
         res.json({ message: 'User created successfully', data: user });
     }
     catch (err) {
@@ -58,7 +58,7 @@ const updateUserDetails = (req, res) => __awaiter(void 0, void 0, void 0, functi
     const { name, email } = value;
     const userId = parseInt(req.params.id);
     try {
-        const details = yield (0, database_1.updateUser)(userId, name, email);
+        const details = yield (0, User_db_1.updateUser)(userId, name, email);
         res.json({ message: 'Data received', data: details });
     }
     catch (err) {
@@ -75,7 +75,7 @@ const delete_user = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     const userId = value;
     try {
-        const result = yield (0, database_1.deleteUser)(userId);
+        const result = yield (0, User_db_1.deleteUser)(userId);
         res.json({ message: 'User deleted successfully', data: result });
     }
     catch (err) {
