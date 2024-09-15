@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Joi, { number } from 'joi';
-import { deleteExpenseGroup, addExpenseGroup, updateExpenseGroup } from '../db.methods/ExpenseGroup.db';
+import expenseGroupService from '../db.methods/ExpenseGroup.db';
 
 const ExpenseGroupScheme = Joi.object({
     name: Joi.string().min(2).required(),
@@ -21,7 +21,7 @@ export const addNewExpenseGroup = async (req: Request, res: Response): Promise<a
     const { name, description, addedUser, associatedMembers, dateTime } = value;
 
     try {
-        const expenseGroup = await addExpenseGroup(
+        const expenseGroup = await expenseGroupService.addExpenseGroup(
             name,
             description,
             addedUser,
@@ -50,7 +50,7 @@ export const editExpenseGroup = async (req: Request, res: Response): Promise<any
 
     const { name, description, addedUser, associatedMembers, dateTime } = value;
     try {
-        const expenseGroup = await updateExpenseGroup(
+        const expenseGroup = await expenseGroupService.updateExpenseGroup(
             ExpenseGroupId,
             name,
             description,
@@ -73,7 +73,7 @@ export const removeExpenseGroup = async (req: Request, res: Response): Promise<a
     }
     const userId = value;
     try {
-        const result = await deleteExpenseGroup(userId);
+        const result = await expenseGroupService.deleteExpenseGroup(userId);
         res.json({ message: 'Expense Group deleted successfully', data: result });
     } catch (err) {
         console.error(err);

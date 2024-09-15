@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
-import { addExpense, deleteExpense, updateExpense } from '../db.methods/Expense.db';
+import expenseService from '../db.methods/Expense.db';
 
 const expenseIDSchema = Joi.number().integer().positive().required()
 const addExpenseSchema = Joi.object({
@@ -9,8 +9,8 @@ const addExpenseSchema = Joi.object({
     addedUser: Joi.number().integer().positive().required(),
     amount : Joi.number().positive().required(),
     currency : Joi.string().length(3).required(),
-    splitBy : Joi.array().items(Joi.string()).optional(),
-    associatedExpenseGroups : Joi.array().items(Joi.string()).optional()
+    splitBy : Joi.array().items(Joi.number()).optional(),
+    associatedExpenseGroups : Joi.array().items(Joi.number()).optional()
 });
 
 const updateExpenseSchema = Joi.object({
@@ -18,8 +18,8 @@ const updateExpenseSchema = Joi.object({
     description : Joi.string().optional(),
     amount : Joi.number().positive().optional(),
     currency : Joi.string().length(3).optional(),
-    splitBy : Joi.array().items(Joi.string()).optional(),
-    associatedExpenseGroups : Joi.array().items(Joi.string()).optional()
+    splitBy : Joi.array().items(Joi.number()).optional(),
+    associatedExpenseGroups : Joi.array().items(Joi.number()).optional()
 });
 
 export const addNewExpense = async (req: Request, res: Response) : Promise<any> => {
@@ -30,7 +30,7 @@ export const addNewExpense = async (req: Request, res: Response) : Promise<any> 
     const {name, description, addedUser, amount, currency, splitBy, associatedExpenseGroups} = bodyValue;
 
     try{
-        const expense = await addExpense(
+        const expense = await expenseService.addExpense(
             name,
             description,
             addedUser,
@@ -63,7 +63,7 @@ export const editExpense = async (req: Request, res: Response) : Promise<any> =>
     const associatedExpenseGroups = bodyValue.associatedExpenseGroups;    
 
     try{
-        const expense = await updateExpense(
+        const expense = await expenseService.updateExpense(
             expenseID,
             name,
             description,
@@ -84,7 +84,7 @@ export const removeExpense = async (req: Request, res: Response): Promise<any> =
         return res.status(400).send(error.details[0].message);
     }
     try {
-        const result = await deleteExpense(expenseID);
+        const result = await expenseService.deleteExpense(expenseID);
         res.json({ message: 'Expense deleted successfully', data: result });
     } catch (err) {
         console.error(err);

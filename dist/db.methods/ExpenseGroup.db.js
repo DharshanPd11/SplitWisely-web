@@ -15,18 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.addExpenseGroup = addExpenseGroup;
 exports.updateExpenseGroup = updateExpenseGroup;
 exports.deleteExpenseGroup = deleteExpenseGroup;
-const User_db_1 = __importDefault(require("./User.db"));
-// Name              | varchar(100) | YES  |     | NULL    |                |
-// | Description       | text         | YES  |     | NULL    |                |
-// | AddedUser         | int(11)      | YES  | MUL | NULL    |                |
-// | Members           | json         | YES  |     | NULL    |                |
-// | AssociatedMembers | json         | YES  |     | NULL    |                |
-// | DateTime 
+const console_1 = require("console");
+const DatabasePoolManager_db_1 = __importDefault(require("./DatabasePoolManager.db"));
+const pool = DatabasePoolManager_db_1.default.getPool();
 function addExpenseGroup(name, description, addedUser, associatedMembers, datetime) {
     return __awaiter(this, void 0, void 0, function* () {
         const associatedMembersJson = JSON.stringify(associatedMembers);
         try {
-            const [result, fields] = yield User_db_1.default.query("INSERT into ExpenseGroups (Name, Description, AddedUser, AssociatedMembers, DateTime ) VALUES (?,?,?,?,?)", [
+            const [result, fields] = yield pool.query("INSERT into ExpenseGroups (Name, Description, AddedUser, AssociatedMembers, DateTime ) VALUES (?,?,?,?,?)", [
                 name, description, addedUser, associatedMembersJson, datetime
             ]);
             console.log(associatedMembersJson);
@@ -65,7 +61,7 @@ function updateExpenseGroup(id, name, description, addedUser, associatedMembers,
                 values.push(datetime);
             }
             if (updates.length === 0) {
-                console.log("No values provided for update.");
+                throw new Error("No values provided for update.");
             }
             values.push(id);
             const query = `
@@ -74,12 +70,13 @@ function updateExpenseGroup(id, name, description, addedUser, associatedMembers,
             WHERE id = ?
         `;
             // Execute the query
-            const [result, fields] = yield User_db_1.default.query(query, values);
+            const [result, fields] = yield pool.query(query, values);
             console.log("Update successful:", result);
             return result;
         }
         catch (error) {
             console.error("Error adding Expense Group !", error);
+            throw (error);
         }
     });
 }
@@ -90,10 +87,11 @@ function deleteExpenseGroup(id) {
         DELETE from ExpenseGroups
         WHERE id = ?
         `;
-            const [result, fields] = yield User_db_1.default.query(query, [id]);
+            const [result, fields] = yield pool.query(query, [id]);
         }
         catch (_a) {
             console.error("Error deleting Expense Group");
+            throw (console_1.error);
         }
     });
 }

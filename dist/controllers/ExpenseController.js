@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.removeExpense = exports.editExpense = exports.addNewExpense = void 0;
 const joi_1 = __importDefault(require("joi"));
-const Expense_db_1 = require("../db.methods/Expense.db");
+const Expense_db_1 = __importDefault(require("../db.methods/Expense.db"));
 const expenseIDSchema = joi_1.default.number().integer().positive().required();
 const addExpenseSchema = joi_1.default.object({
     name: joi_1.default.string().min(2).required(),
@@ -22,16 +22,16 @@ const addExpenseSchema = joi_1.default.object({
     addedUser: joi_1.default.number().integer().positive().required(),
     amount: joi_1.default.number().positive().required(),
     currency: joi_1.default.string().length(3).required(),
-    splitBy: joi_1.default.array().items(joi_1.default.string()).optional(),
-    associatedExpenseGroups: joi_1.default.array().items(joi_1.default.string()).optional()
+    splitBy: joi_1.default.array().items(joi_1.default.number()).optional(),
+    associatedExpenseGroups: joi_1.default.array().items(joi_1.default.number()).optional()
 });
 const updateExpenseSchema = joi_1.default.object({
     name: joi_1.default.string().min(2).optional(),
     description: joi_1.default.string().optional(),
     amount: joi_1.default.number().positive().optional(),
     currency: joi_1.default.string().length(3).optional(),
-    splitBy: joi_1.default.array().items(joi_1.default.string()).optional(),
-    associatedExpenseGroups: joi_1.default.array().items(joi_1.default.string()).optional()
+    splitBy: joi_1.default.array().items(joi_1.default.number()).optional(),
+    associatedExpenseGroups: joi_1.default.array().items(joi_1.default.number()).optional()
 });
 const addNewExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { error: bodyValidationError, value: bodyValue } = addExpenseSchema.validate(req.body);
@@ -40,7 +40,7 @@ const addNewExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     const { name, description, addedUser, amount, currency, splitBy, associatedExpenseGroups } = bodyValue;
     try {
-        const expense = yield (0, Expense_db_1.addExpense)(name, description, addedUser, amount, currency, splitBy, associatedExpenseGroups);
+        const expense = yield Expense_db_1.default.addExpense(name, description, addedUser, amount, currency, splitBy, associatedExpenseGroups);
         res.json({ message: 'Expense Group created successfully', data: expense });
     }
     catch (err) {
@@ -64,7 +64,7 @@ const editExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const splitBy = bodyValue.splitBy;
     const associatedExpenseGroups = bodyValue.associatedExpenseGroups;
     try {
-        const expense = yield (0, Expense_db_1.updateExpense)(expenseID, name, description, amount, currency, splitBy, associatedExpenseGroups);
+        const expense = yield Expense_db_1.default.updateExpense(expenseID, name, description, amount, currency, splitBy, associatedExpenseGroups);
         res.json({ message: 'Expense updated successfully', data: expense });
     }
     catch (error) {
@@ -78,7 +78,7 @@ const removeExpense = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         return res.status(400).send(error.details[0].message);
     }
     try {
-        const result = yield (0, Expense_db_1.deleteExpense)(expenseID);
+        const result = yield Expense_db_1.default.deleteExpense(expenseID);
         res.json({ message: 'Expense deleted successfully', data: result });
     }
     catch (err) {

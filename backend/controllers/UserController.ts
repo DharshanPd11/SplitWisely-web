@@ -1,16 +1,11 @@
 import { Request, Response } from 'express';
 import Joi from 'joi';
-import { createUser, getUsers, deleteUser, updateUser } from '../db.methods/User.db';
+import userService from '../db.methods/User.db';
 
 export const getData = async (req: Request, res: Response): Promise<any> => {
-  const result = await getUsers()
+  const result = await userService.getUsers()
   console.log(result);
   res.json({ data: result });
-};
-
-export const postData = (req: Request, res: Response): void => {
-  const receivedData = req.body;
-  res.json({ message: 'Data received', data: receivedData });
 };
 
 export const addNewUser = async (req: Request, res: Response): Promise<any> => {
@@ -28,8 +23,8 @@ export const addNewUser = async (req: Request, res: Response): Promise<any> => {
 
   const { name, email, groups } = value;
   try {
-    const user = await createUser(name, email, groups);
-    res.json({ message: 'User created successfully', data: user });
+    const userData = await userService.createUser(name, email, groups);
+    res.json({ message: 'User created successfully', data: userData });
   } catch (err) {
     throw err;
   }
@@ -51,8 +46,8 @@ export const updateUserDetails = async (req: Request, res: Response): Promise<an
   const userId = parseInt(req.params.id);
 
   try {
-    const details = await updateUser(userId, name, email);
-    res.json({ message: 'Data received', data: details });
+    const userData = await userService.updateUser(userId, name, email);
+    res.json({ message: 'Data received', data: userData });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -67,7 +62,7 @@ export const delete_user = async (req: Request, res: Response): Promise<any> => 
   }
   const userId = value;
   try {
-    const result = await deleteUser(userId);
+    const result = await userService.deleteUser(userId);
     res.json({ message: 'User deleted successfully', data: result });
   } catch (err) {
     console.error(err);

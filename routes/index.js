@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const router = express.Router();
-const userController = require('../dist/controllers/test');
+const userController = require('../dist/controllers/UserController');
 const expenseGroupController = require('../dist/controllers/ExpenseGroupController')
 const expenseController = require('../dist/controllers/ExpenseController')
 
@@ -29,13 +29,9 @@ router.get('/new_group', (req, res) => {
 
 //USER METHODS
 router.get('/api/data', userController.getData);
-
-router.post('/add_user', userController.addNewUser);
-
+router.post('/api/add_user', userController.addNewUser);
 router.put('/api/update_user/:id', userController.updateUserDetails);
-
 router.delete('/delete_user/:id', userController.delete_user);
-
 
 //EXPENSE GROUP METHODS
 router.post('/api/add_expense_group', expenseGroupController.addNewExpenseGroup);
